@@ -1,22 +1,27 @@
 <template>
   <header>
     <div class="logo">
-      <img src="@/assets/logo.png" alt="Logo TRADIC">
+      <router-link :to="{ name: 'home' }"><img src="@/assets/logo.png" alt="Logo TRADIC"></router-link>
     </div>
     <div class="tcgs">
       <img src="@/assets/lorcana-logo.webp" alt="Logo Lorcana">
-      <img src="@/assets/magic.webp" alt="Logo Magic">
-      <img src="@/assets/Pokémon_Trading_Card_Game_logo.svg.png" alt="Logo Pokémon">
     </div>
-    <div class="left">
+    <div class="right">
       <div><input type="text" placeholder="Rechercher..."></div>
-      <div><account-icon /></div>
+      <div><account-icon v-on:click="handler" /></div>
     </div>
   </header>
+  <LoginComponent v-if="showLogin" />
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import AccountIcon from 'vue-material-design-icons/Account.vue';
+import LoginComponent from './LoginComponent.vue';
+const showLogin = ref(true)
+const handler = () => {
+  showLogin.value = !showLogin.value
+}
 </script>
 
 <style scoped lang="scss">
@@ -26,14 +31,25 @@ import AccountIcon from 'vue-material-design-icons/Account.vue';
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 10px 60px;
+  }
+
+  .tcgs {
+    gap: 100px;
+    display: flex;
+
+    img {
+      cursor: pointer;
+    }
   }
 
   img {
     height: 56px;
   }
 
-  .left {
+  .right {
     display: flex;
+    gap: 10px;
     justify-content: center;
     align-items: center;
 
@@ -41,6 +57,7 @@ import AccountIcon from 'vue-material-design-icons/Account.vue';
       border-radius: 26px;
       background-color: #E8F0F6;
       padding: 4px 32px;
+      width: 140px;
     }
   }
 </style>
