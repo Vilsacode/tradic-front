@@ -23,17 +23,26 @@
         <button class="roboto-regular" @click="connect">Connexion</button>
         <p class="roboto-light error" v-if="error != ''">{{ error }}</p>
       </div>
-      <p class="secondary-color">Mot de passe oublié ?</p>
-      <p>Pas encore de compte ? <span class="secondary-color">S'inscrire</span></p>
+      <p class="secondary-color forgotPassword" @click="forgotPassword">Mot de passe oublié ?</p>
+      <p>
+        Pas encore de compte ?
+        <span class="secondary-color signIn" @click="signIn">S'inscrire</span>
+      </p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import type Request from '@/domain/usecase/UserConnection/request'
-import type Output from '@/domain/usecase/UserConnection/output'
-import usecase from '@/domain/usecase/UserConnection/usecase'
+import type UserConnectionRequest from '@/domain/usecase/UserConnection/request'
+import type UserConnectionOutput from '@/domain/usecase/UserConnection/output'
+import userConnectionUsecase from '@/domain/usecase/UserConnection/usecase'
+import type UserForgotPasswordRequest from '@/domain/usecase/UserForgotPassword/request'
+import type UserForgotPasswordOutput from '@/domain/usecase/UserForgotPassword/output'
+import userForgotPasswordUsecase from '@/domain/usecase/UserForgotPassword/usecase'
+import type UserSignInRequest from '@/domain/usecase/UserSignIn/request'
+import type UserSignInOutput from '@/domain/usecase/UserSignIn/output'
+import userSignInUsecase from '@/domain/usecase/UserSignIn/usecase'
 import { store } from '@/infrastructure/store/user'
 
 const login = ref('')
@@ -41,12 +50,12 @@ const password = ref('')
 const error = ref('')
 
 const connect = () => {
-  const request: Request = {
+  const request: UserConnectionRequest = {
     login: login.value,
     password: password.value,
   }
 
-  const output: Output = {
+  const output: UserConnectionOutput = {
     present: (response) => {
       if (response.error) {
         error.value = response.error
@@ -59,11 +68,49 @@ const connect = () => {
     },
   }
 
-  usecase(request, output)
+  userConnectionUsecase(request, output)
 }
 
 const disconnect = () => {
   store.user = undefined
+}
+
+const forgotPassword = () => {
+  const request: UserForgotPasswordRequest = {
+    login: login.value,
+  }
+
+  const output: UserForgotPasswordOutput = {
+    present: (response) => {
+      if (response.error) {
+        error.value = response.error
+        return
+      }
+
+      login.value = ''
+      console.log('Forgot password')
+    },
+  }
+
+  userForgotPasswordUsecase(request, output)
+}
+
+const signIn = () => {
+  const request: UserSignInRequest = {
+    login: login.value,
+  }
+
+  const output: UserSignInOutput = {
+    present: (response) => {
+      if (response.error) {
+        error.value = response.error
+        return
+      }
+      console.log('Sign In')
+    },
+  }
+
+  userSignInUsecase(request, output)
 }
 </script>
 
@@ -130,5 +177,15 @@ button {
   font-size: 32px;
   border-radius: 30px;
   border: none;
+  cursor: pointer;
+}
+
+.forgotPassword,
+.signIn {
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 </style>
