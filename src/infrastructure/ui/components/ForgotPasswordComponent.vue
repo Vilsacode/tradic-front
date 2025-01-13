@@ -1,24 +1,15 @@
 <template>
   <div class="login-modal_connection">
-    <p class="title">Connexion</p>
+    <p class="title">Mot de passe oublié</p>
     <div class="container">
       <p>Email</p>
       <input class="roboto-light" placeholder="Entrez votre email" type="text" v-model="login" />
     </div>
-    <div class="container">
-      <p>Mot de passe</p>
-      <input
-        class="roboto-light"
-        placeholder="Entrez votre mot de passe"
-        type="password"
-        v-model="password"
-      />
-    </div>
     <div class="connection">
-      <button class="roboto-regular" @click="connect">Connexion</button>
+      <button class="roboto-regular" @click="forgotPassword">Changer de mot de passe</button>
       <p class="roboto-light error" v-if="error != ''">{{ error }}</p>
     </div>
-    <p class="secondary-color forgotPassword" @click="forgotPassword">Mot de passe oublié ?</p>
+    <p class="secondary-color forgotPassword" @click="returnToLogin">Retour</p>
     <p>
       Pas encore de compte ?
       <span class="secondary-color signIn" @click="signIn">S'inscrire</span>
@@ -28,45 +19,39 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import type UserConnectionRequest from '@/domain/usecase/UserConnection/request'
-import type UserConnectionOutput from '@/domain/usecase/UserConnection/output'
-import userConnectionUsecase from '@/domain/usecase/UserConnection/usecase'
-import { store } from '@/infrastructure/store/user'
-import UserComponent from './UserComponent.vue'
-import ForgotPasswordComponent from './ForgotPasswordComponent.vue'
+import type UserForgotPasswordRequest from '@/domain/usecase/UserForgotPassword/request'
+import type UserForgotPasswordOutput from '@/domain/usecase/UserForgotPassword/output'
+import userForgotPasswordUsecase from '@/domain/usecase/UserForgotPassword/usecase'
+import LoginComponent from './LoginComponent.vue'
 import SignInComponent from './SignInComponent.vue'
 
 const emit = defineEmits(['changeComponent'])
 
 const login = ref('')
-const password = ref('')
 const error = ref('')
 
-const connect = () => {
-  const request: UserConnectionRequest = {
+const forgotPassword = () => {
+  const request: UserForgotPasswordRequest = {
     login: login.value,
-    password: password.value,
   }
 
-  const output: UserConnectionOutput = {
+  const output: UserForgotPasswordOutput = {
     present: (response) => {
       if (response.error) {
         error.value = response.error
         return
       }
 
-      store.user = response.user
       login.value = ''
-      password.value = ''
-      emit('changeComponent', UserComponent)
+      console.log('Forgot password')
     },
   }
 
-  userConnectionUsecase(request, output)
+  userForgotPasswordUsecase(request, output)
 }
 
-const forgotPassword = () => {
-  emit('changeComponent', ForgotPasswordComponent)
+const returnToLogin = () => {
+  emit('changeComponent', LoginComponent)
 }
 
 const signIn = () => {

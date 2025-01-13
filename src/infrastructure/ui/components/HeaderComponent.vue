@@ -13,13 +13,13 @@
       <div><account-icon v-on:click="handler" /></div>
     </div>
   </header>
-  <LoginComponent v-if="showLogin" />
+  <SidebarRightComponent v-if="showLogin" />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import AccountIcon from 'vue-material-design-icons/Account.vue'
-import LoginComponent from './LoginComponent.vue'
+import SidebarRightComponent from './SidebarRightComponent.vue'
 const showLogin = ref(false)
 const handler = () => {
   showLogin.value = !showLogin.value

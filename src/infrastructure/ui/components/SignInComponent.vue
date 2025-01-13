@@ -1,76 +1,52 @@
 <template>
   <div class="login-modal_connection">
-    <p class="title">Connexion</p>
+    <p class="title">S'inscrire</p>
     <div class="container">
       <p>Email</p>
       <input class="roboto-light" placeholder="Entrez votre email" type="text" v-model="login" />
     </div>
-    <div class="container">
-      <p>Mot de passe</p>
-      <input
-        class="roboto-light"
-        placeholder="Entrez votre mot de passe"
-        type="password"
-        v-model="password"
-      />
-    </div>
     <div class="connection">
-      <button class="roboto-regular" @click="connect">Connexion</button>
+      <button class="roboto-regular" @click="signIn">S'inscrire</button>
       <p class="roboto-light error" v-if="error != ''">{{ error }}</p>
     </div>
-    <p class="secondary-color forgotPassword" @click="forgotPassword">Mot de passe oublié ?</p>
-    <p>
-      Pas encore de compte ?
-      <span class="secondary-color signIn" @click="signIn">S'inscrire</span>
-    </p>
+    <p class="secondary-color forgotPassword" @click="returnToLogin">Retour</p>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import type UserConnectionRequest from '@/domain/usecase/UserConnection/request'
-import type UserConnectionOutput from '@/domain/usecase/UserConnection/output'
-import userConnectionUsecase from '@/domain/usecase/UserConnection/usecase'
-import { store } from '@/infrastructure/store/user'
-import UserComponent from './UserComponent.vue'
-import ForgotPasswordComponent from './ForgotPasswordComponent.vue'
-import SignInComponent from './SignInComponent.vue'
+import type UserSignInRequest from '@/domain/usecase/UserSignIn/request'
+import type UserSignInOutput from '@/domain/usecase/UserSignIn/output'
+import userSignInUsecase from '@/domain/usecase/UserSignIn/usecase'
+import LoginComponent from './LoginComponent.vue'
 
 const emit = defineEmits(['changeComponent'])
 
 const login = ref('')
-const password = ref('')
 const error = ref('')
 
-const connect = () => {
-  const request: UserConnectionRequest = {
+const signIn = () => {
+  const request: UserSignInRequest = {
     login: login.value,
-    password: password.value,
   }
 
-  const output: UserConnectionOutput = {
+  const output: UserSignInOutput = {
     present: (response) => {
       if (response.error) {
         error.value = response.error
         return
       }
 
-      store.user = response.user
       login.value = ''
-      password.value = ''
-      emit('changeComponent', UserComponent)
+      console.log('Forgot password')
     },
   }
 
-  userConnectionUsecase(request, output)
+  userSignInUsecase(request, output)
 }
 
-const forgotPassword = () => {
-  emit('changeComponent', ForgotPasswordComponent)
-}
-
-const signIn = () => {
-  emit('changeComponent', SignInComponent)
+const returnToLogin = () => {
+  emit('changeComponent', LoginComponent)
 }
 </script>
 
