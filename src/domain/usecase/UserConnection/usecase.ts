@@ -13,7 +13,6 @@ export default (request: Request, output: output) => {
   }
 
   const user = services.userRepository.login(request.login, request.password)
-  console.log(user)
 
   if (!user) {
     response.error = 'Login ou mot de passe incorrect'
