@@ -10,7 +10,7 @@
     </div>
     <div class="right">
       <div><input type="text" placeholder="Rechercher..." /></div>
-      <div><account-icon v-on:click="handler" /></div>
+      <div class="account"><account-icon v-on:click="handler" /></div>
     </div>
   </header>
   <SidebarRightComponent v-if="showLogin" />
@@ -34,6 +34,10 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 10px 60px;
+
+  .account {
+    cursor: pointer;
+  }
 }
 
 .tcgs {
