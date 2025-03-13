@@ -1,6 +1,13 @@
 <template>
   <div class="filters">
-    <div class="actives montserrat"></div>
+    <div class="actives montserrat">
+      <div class="active-filter" v-for="(filter, key) in activeFilter" :key="key">
+        <span>{{ key }} :</span>
+        <span v-for="item in filter" :key="item"
+          ><img :src="getImageByTypeAndName(key, item)"
+        /></span>
+      </div>
+    </div>
     <div class="actions">
       <TuneVariantIcon :size="48" @click="toggleModalFilter" />
     </div>
@@ -12,6 +19,7 @@
 import TuneVariantIcon from 'vue-material-design-icons/TuneVariant.vue'
 import FilterCardModalComponent from './FilterCardModalComponent.vue'
 import { ref } from 'vue'
+import { activeFilter, getImageByTypeAndName } from '@/domain/store/filters'
 
 const toggleModalFilter = () => {
   openModalFilter.value = !openModalFilter.value
@@ -31,6 +39,26 @@ const openModalFilter = ref(false)
     display: flex;
     align-items: center;
     font-size: 32px;
+
+    .active-filter {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-right: 4px solid;
+      padding: 0 10px;
+
+      &:last-of-type {
+        border-right: 0;
+      }
+
+      span {
+        padding: 0 5px;
+      }
+
+      img {
+        width: 30px;
+      }
+    }
   }
 
   .actions {

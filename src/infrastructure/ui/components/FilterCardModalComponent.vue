@@ -20,7 +20,7 @@
         <div class="filter_title montserrat">Encres :</div>
         <div class="filter_filters">
           <img
-            v-for="encre in store.encres"
+            v-for="encre in store.encre"
             :key="encre.name"
             :src="encre.image"
             :alt="encre.name"
@@ -33,7 +33,7 @@
         <div class="filter_title montserrat">Encrable :</div>
         <div class="filter_filters">
           <img
-            v-for="inkcost in store.inkcostable"
+            v-for="inkcost in store.inkcost"
             :key="inkcost.name"
             :src="inkcost.image"
             :alt="inkcost.name"
