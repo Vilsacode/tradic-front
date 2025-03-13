@@ -14,23 +14,41 @@ import SingleCardComponent from './SingleCardComponent.vue'
 import usecase from '@/domain/usecase/CardRetriveAll/usecase'
 import type Request from '@/domain/usecase/CardRetriveAll/request'
 import type Output from '@/domain/usecase/CardRetriveAll/output'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import type Card from '@/domain/entity/card'
+import { activeFilter } from '@/domain/store/filters'
 
-const cards = ref<Card[] | undefined>(undefined)
+const cards = ref<Card[]>([])
 const nbCardByLine = 10
 
 const request: Request = {
   filters: null,
+  page: 1,
 }
 
 const presenter: Output = {
   present(response) {
-    cards.value = response.cards
+    if (response.error) {
+      console.error(response.error)
+      return
+    }
+
+    if (response.cards) {
+      cards.value.push(...response.cards)
+    }
+    if (response.pagination.current < response.pagination.total) {
+      request.page += 1
+      usecase(request, presenter)
+    }
   },
 }
 
 usecase(request, presenter)
+
+watch(activeFilter, () => {
+  cards.value = []
+  usecase(request, presenter)
+})
 </script>
 
 <style lang="scss">

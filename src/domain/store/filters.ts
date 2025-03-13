@@ -8,7 +8,7 @@ interface StoreInterface {
   }[]
 }
 
-interface ActiveFilter {
+export interface ActiveFilter {
   [index: string]: string[]
 }
 

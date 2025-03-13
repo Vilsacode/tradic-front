@@ -1,3 +1,6 @@
+import type { ActiveFilter } from '@/domain/store/filters'
+
 export default interface Request {
-  filters: null
+  filters: ActiveFilter,
+  page: number
 }
