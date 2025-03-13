@@ -4,7 +4,7 @@
 </template>
 
 <script setup lang="ts">
-import { store } from '@/infrastructure/store/user'
+import { store } from '@/domain/store/user'
 import LoginComponent from './LoginComponent.vue'
 
 const emit = defineEmits(['changeComponent'])
